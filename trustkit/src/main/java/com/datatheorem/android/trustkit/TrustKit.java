@@ -175,16 +175,14 @@ public class TrustKit {
     private final TrustKitConfiguration trustKitConfiguration;
 
     protected TrustKit(@NonNull Context context,
-                       @NonNull TrustKitConfiguration trustKitConfiguration) {
+                       @NonNull TrustKitConfiguration trustKitConfiguration,
+                       boolean enableDebugOverride
+    ) {
         this.trustKitConfiguration = trustKitConfiguration;
 
-        // Setup the debug-overrides setting if the App is debuggable
-        // Do not use BuildConfig.DEBUG as it does not work for libraries
-        boolean isAppDebuggable = (0 !=
-                (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         Set<Certificate> debugCaCerts = null;
         boolean shouldOverridePins = false;
-        if (isAppDebuggable) {
+        if (enableDebugOverride) {
             debugCaCerts = trustKitConfiguration.getDebugCaCertificates();
             if (debugCaCerts != null) {
                 TrustKitLog.i("App is debuggable - processing <debug-overrides> configuration.");
@@ -264,11 +262,11 @@ public class TrustKit {
      */
     @NonNull
     public synchronized static TrustKit initializeWithNetworkSecurityConfiguration(
-            @NonNull Context context) {
+            @NonNull Context context, boolean enableDebugOverride) {
         // Try to get the default network policy resource ID
         int networkSecurityConfigId = context.getResources().getIdentifier(
                 "network_security_config", "xml", context.getPackageName());
-        return initializeWithNetworkSecurityConfiguration(context, networkSecurityConfigId);
+        return initializeWithNetworkSecurityConfiguration(context, networkSecurityConfigId, enableDebugOverride);
     }
 
     /** Initialize TrustKit with the Network Security Configuration file with the specified
@@ -283,7 +281,7 @@ public class TrustKit {
      */
     @NonNull
     public synchronized static TrustKit initializeWithNetworkSecurityConfiguration(
-            @NonNull Context context, int configurationResourceId) {
+            @NonNull Context context, int configurationResourceId, boolean enableDebugOverride) {
         if (trustKitInstance != null) {
             throw new IllegalStateException("TrustKit has already been initialized");
         }
@@ -318,7 +316,7 @@ public class TrustKit {
                     "network security police file");
         }
 
-        trustKitInstance = new TrustKit(context, trustKitConfiguration);
+        trustKitInstance = new TrustKit(context, trustKitConfiguration, enableDebugOverride);
         return trustKitInstance;
     }
 
