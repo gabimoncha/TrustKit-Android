@@ -2,6 +2,8 @@ package com.datatheorem.android.trustkit.config;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -94,7 +96,7 @@ public final class DomainPinningPolicy {
         reportUris = new HashSet<>();
         if (reportUriStrList != null) {
             for (String UriStr : reportUriStrList) {
-                reportUris.add(new URL(UriStr));
+                reportUris.add(Urls.create(UriStr, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
             }
         }
 
