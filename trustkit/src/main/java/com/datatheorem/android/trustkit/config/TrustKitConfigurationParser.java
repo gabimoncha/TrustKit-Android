@@ -153,7 +153,7 @@ class TrustKitConfigurationParser {
                 // Found one
                 // Sanity check on the digest value
                 String digest = parser.getAttributeValue(null, "digest");
-                if ((digest == null) || !digest.equals("SHA-256")) {
+                if ((digest == null) || !"SHA-256".equals(digest)) {
                     throw new IllegalArgumentException("Unexpected digest value: " + digest);
                 }
                 // Parse the pin value
@@ -268,8 +268,8 @@ class TrustKitConfigurationParser {
 
                 // Parse the path to the certificate bundle for src=@raw - we ignore system or user
                 // as the src
-                if (!TextUtils.isEmpty(caPathFromUser) && !caPathFromUser.equals("user")
-                        && !caPathFromUser.equals("system") && caPathFromUser.startsWith("@raw")) {
+                if (!TextUtils.isEmpty(caPathFromUser) && !"user".equals(caPathFromUser)
+                        && !"system".equals(caPathFromUser) && caPathFromUser.startsWith("@raw")) {
 
                     InputStream stream =
                             context.getResources().openRawResource(

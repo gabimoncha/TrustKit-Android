@@ -24,7 +24,7 @@ public class VendorIdentifier {
                 PreferenceManager.getDefaultSharedPreferences(appContext);
         // We store the vendor ID in the App's preferences
         String appVendorId = trustKitSharedPreferences.getString(TRUSTKIT_VENDOR_ID, "");
-        if (appVendorId.equals("")) {
+        if ("".equals(appVendorId)) {
             // First time the App is running: generate and store a new vendor ID
             TrustKitLog.i("Generating new vendor identifier...");
             appVendorId = UUID.randomUUID().toString();
