@@ -1,6 +1,8 @@
 package com.datatheorem.android.trustkit.config;
 
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
@@ -53,7 +55,7 @@ public class DomainPinningPolicyTest {
         // And the default report URI was added as shouldDisableDefaultReportUri is false
         Set<URL> expectedReportUris = new HashSet<>();
         for (String uriStr : reportUris) {
-            expectedReportUris.add(new URL(uriStr));
+            expectedReportUris.add(Urls.create(uriStr, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
         }
         expectedReportUris.add(new URL("https://overmind.datatheorem.com/trustkit/report"));
         assertEquals(expectedReportUris, policy.getReportUris());
