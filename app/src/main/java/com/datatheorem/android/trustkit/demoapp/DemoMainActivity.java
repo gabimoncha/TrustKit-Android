@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.datatheorem.android.trustkit.TrustKit;
 import com.datatheorem.android.trustkit.reporting.BackgroundReporter;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +66,7 @@ public class DemoMainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL url = new URL(params[0]);
+                URL url = Urls.create(params[0], Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                 HttpsURLConnection connection = null;
                 connection = (HttpsURLConnection) url.openConnection();
                 connection.setSSLSocketFactory(TrustKit.getInstance().getSSLSocketFactory(url.getHost()));
